@@ -2,72 +2,9 @@
 
 #include "get_next_line.h"
 
-int		ft_cases(char *c, static char **s)
+size_t  ft_strlen(char *cad)
 {
-	size_t		i;
-
-	i = 0;
-	while (c[i] != '\n')
-	{
-		if (c[i] == '\n')
-			return (0);
-		i++;
-	}
-	*s = malloc (sizeof(char) * i);
-	if (*s == NULL)
-		return (NULL);
-	while (i >= 0)
-	{
-		(*s)[i] = c[i];
-		i--;
-	}
-	return (-1);
-}
-
-void	ft_newaux(char	*c, static char **s, size_t k)
-{
-	size_t	i;
-	size_t	j;
-
-	i = 0;
-	j = k;
-	while (c[k])
-		c[k++];
-	*s = malloc(sizeof(char) * (k - j + 1));
-	if (!*s)
-		return (NULL);
-	while (c[k - j])
-		*s[i++] = c[(k - j)++];
-	*s[i] = '\0';
-}
-
-char	*ft_fill(char *c, static char **s, char *str)
-{
-	size_t	i;
-	size_t	k;
-
-	i = 0;
-	k = 0;
-	if (*s != NULL)
-	{
-		while (*s[i])
-		{
-			str[i] = *s[i];
-			i++;
-		}
-		free(*s);
-	}
-		while (c[k] != '\0' && c[k])
-			str[i++] = c[k++];
-	str[i] = '\0';
-	if (c[k] != NULL)
-		ft_newaux(c, s, k);
-	return (str);
-}
-
-size_t	ft_strlen(char cad)
-{
-	size_t		i;
+    size_t		i;
 
 	i = 0;
 	while (cad[i] != '\n' && cad[i])
@@ -75,26 +12,95 @@ size_t	ft_strlen(char cad)
 	return(i);
 }
 
-char	*ft_nextl(char *c, static char **s)
+int		ft_cases(char *c)
+{
+	size_t		i;
+
+	i = 0;
+	while (c[i])
+	{
+		if (c[i] == '\n')
+			return (0);
+		i++;
+	}
+	return (-1);
+}
+
+void	ft_newaux(char	*c, char **s, size_t k)
+{
+	size_t	i;
+	size_t	len;
+
+	i = 0;
+	len = 0;
+	k++;
+	while (c[k + len])
+		len++;
+	if (len == 0)
+	{
+		free(*s);
+		(*s) = NULL;
+		return ;
+	}
+	(*s) = malloc(sizeof(char) * (len + 1));
+	if (!*s)
+		return ;
+	while (i < len)
+	{
+		(*s)[i] = c[(k + i)];
+		i++;
+	}
+	(*s)[i] = '\0';
+}
+
+char	*ft_fill(char *c, char **s, char *str)
+{
+	size_t	i;
+	size_t	k;
+
+	i = 0;
+	k = 0;
+	if (*s)
+	{
+		while ((*s[i]))
+		{
+			str[i] = *s[i];
+			i++;
+		}
+		free(*s);
+	}
+		while (c[k] != '\n' && c[k])
+			str[i++] = c[k++];
+	str[i++] = '\n';
+	str[i] = '\0';
+	if (c[k] != '\0')
+		ft_newaux(c, s, k);
+	return (str);
+}
+
+char	*ft_nextl(char *c, char **s)
 {
 	char	*str;
-	size_t	len;	
 
-	if (*s != NULL)
+	if (*s && ft_newln(*s) == ft_strlen(*s))
 	{
-		len = ft_strlen(c);
-		str = malloc(sizeof(char) * (len + ft_strlen(s)));
+		str = malloc(sizeof(char) * (ft_newln(c) + ft_newln(*s) + 1));
 		if (!str)
-		{
-			free(s);
-			return (NULL); 
-		}
+			return (NULL);
 		str = ft_fill(c, s, str);
 		return (str);
 	}
-	str = malloc(sizeof(char) * ft_strlen(c));
+	else if (*s)
+	{
+		str = malloc(sizeof(char) * (ft_newln(*s) + 1));
 		if (!str)
 			return (NULL);
-	ft_fill(c, s);
+		str = ft_staticfill(c, s, str);
+		return (str);
+	}
+	str = malloc(sizeof(char) * (ft_newln(c) + 1));
+	if (!str)
+		return (NULL);
+	str = ft_fill(c, s, str);
 	return (str);
 }
