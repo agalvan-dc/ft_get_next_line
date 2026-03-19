@@ -43,12 +43,12 @@ char	*ft_accum(char *c, char *s)
     new = malloc(sizeof(char) * (ft_strlen(c) + ft_strlen(s) + 1));
     if (!new)
         return (NULL);
-    while (*s[i])
+    while (s[i])
     {
-            new[i] = (*s)[i];
+            new[i] = s[i];
             i++;
     }
-    free(*s);
+    free(s);
     while (c[j])
         new[i++] = c[j++];
     new[i] = '\0';

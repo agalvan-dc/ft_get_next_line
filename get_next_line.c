@@ -34,7 +34,9 @@ char	*ft_nextln(char *str)
 	j = 0;
 	while (str[i] && str[i] != '\n')
 		i++;
-	c = malloc(sizeof(char) * (i + 2));
+	if (str[i] == '\n')
+		i++;
+	c = malloc(sizeof(char) * (i + 1));
 	if (!c)
 		return (NULL);
 	while (j < i)
@@ -42,7 +44,6 @@ char	*ft_nextln(char *str)
 		c[j] = str[j];
 		j++;
 	}
-	c[j++] = '\n';
 	c[j] = '\0';
 	return (c);
 }
@@ -53,24 +54,22 @@ char	*ft_read(int fd, char *str)
 	char	*cad;
 	while (!ft_strchr(str, '\n'))
 	{
-		cad = malloc(sizeof(char) * BUFFER_SIZE + 1);
+		cad = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 		if (!cad)
 			return (NULL);
 		boo = read(fd, cad, BUFFER_SIZE);
 		if (boo <= -1)
 			return (free(str), free(cad), NULL);
 		if (boo == 0)
-		{
-			if (str)
-				return (free(cad), str);
-			else
-				return (free(cad), NULL);
-		}
+			return (free(cad), str);
 		cad[boo] = '\0';
 		if (!str)
 			str = cad;
 		else
-			str = accum(cad, str);
+		{
+			str = ft_accum(cad, str);
+			free(cad);
+		}
 	}
 	return (str);
 }
