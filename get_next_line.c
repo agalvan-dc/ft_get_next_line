@@ -1,105 +1,91 @@
 
 #include "get_next_line.h"
 
-size_t	ft_newln(char *cad)
+char	*ft_newaux(char *str)
 {
-	size_t	len;
+	size_t		i;
+	size_t		j;
+	char		*c;
 
-	len = 0;
-	while (cad[len] != '\n' && cad[len])
-		len++;
-	return (len);
+	i = 0;
+	j = 0;
+	while (str[i] && str[i] != '\n')
+		i++;
+	if (!str[i] || (ft_strlen(str) == i + 1))
+		return(free(str), NULL);
+	i += 1;
+	c = malloc(sizeof(char) * (ft_strlen(str) - i + 1));
+	if (!c)
+		return (NULL);
+	while (str[i])
+		c[j++] = str[i++];
+	c[j] = '\0';
+	free(str);
+	return (c);
 }
 
-char    *ft_accum(char *c, char **s)
+char	*ft_nextln(char *str)
 {
-    size_t  i;
-    size_t  j;
-    char    *new;
+	char	*c;
+	size_t	i;
+	size_t	j;
 
-	j = 0;
 	i = 0;
-	new = malloc(sizeof(char) * (ft_strlen(c) + ft_strlen(*s) + 1));
-	if (!new)
+	j = 0;
+	while (str[i] && str[i] != '\n')
+		i++;
+	c = malloc(sizeof(char) * (i + 2));
+	if (!c)
 		return (NULL);
-	if(*s)
+	while (j < i)
 	{
-		while ((*s)[i])
-		{
-			new[i] = (*s)[i];
-			i++;
-		}
-	free(*s);
-	}
-	while (c[j])
-	{
-		new[i + j] = c[j];
+		c[j] = str[j];
 		j++;
 	}
-	new[i + j] = '\0';	
-	return (new);
+	c[j++] = '\n';
+	c[j] = '\0';
+	return (c);
 }
-char	*ft_staticfill(char *c, char **s, char *str)
-{
-	size_t	i;
 
-	i = 0;
-	while (i < ft_newln(*s))
+char	*ft_read(int fd, char *str)
+{
+	int		boo;
+	char	*cad;
+	while (!ft_strchr(str, '\n'))
 	{
-		str[i] = (*s)[i];
-		i++;
+		cad = malloc(sizeof(char) * BUFFER_SIZE + 1);
+		if (!cad)
+			return (NULL);
+		boo = read(fd, cad, BUFFER_SIZE);
+		if (boo <= -1)
+			return (free(str), free(cad), NULL);
+		if (boo == 0)
+		{
+			if (str)
+				return (free(cad), str);
+			else
+				return (free(cad), NULL);
+		}
+		cad[boo] = '\0';
+		if (!str)
+			str = cad;
+		else
+			str = accum(cad, str);
 	}
-	(*s) = ft_accum(c, s);
-	str[i++] = '\n';
-	str[i] = '\0';
 	return (str);
 }
 
 char	*get_next_line(int fd)
 {
-	char			*c;
-	static char		*s;
-	int		boo;
+	static char *s;
+	char		*c;
 
-	c = malloc(BUFFER_SIZE + 1);
-	if (c == NULL)
+	if (fd < 0 || BUFFER_SIZE < 0)
 		return (NULL);
-	boo = read(fd, c, BUFFER_SIZE);
-	if (boo <= 0)
-	{
-		free(c);
-		if (s)
-		{
-			c = s;
-			s = NULL;
-			return (c);
-		}
+	s = ft_read(fd, s);
+	if (!s)
 		return (NULL);
-	}
-	c[boo] = '\0';
-	boo = ft_cases(c);
-	if (boo == -1)
-	{
-		s = ft_accum(c, &s);
-		free(c);
-		c = get_next_line(fd);
-	}
-	else if (boo == 0)
-		c = ft_nextl(c, &s);
+	c = ft_nextln(s);
+	s = ft_newaux(s);
 	return (c);
 }
-/*
-#include <fcntl.h>
-#include <stdio.h>
-int		main(void)
-{
-	int		fd;
-
-	fd = open("archivo.txt", O_RDONLY);
-	if (fd == -1)
-		return (1);
-	while (fd != 0)
-		printf("%s\n", get_next_line(fd));
-	close(fd);
-	return (0);
-}*/
