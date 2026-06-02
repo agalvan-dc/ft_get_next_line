@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: agalvan- <agalvan-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/23 19:01:48 by agalvan-          #+#    #+#             */
+/*   Updated: 2026/06/02 14:33:43 by agalvan-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "get_next_line.h"
 
@@ -12,8 +23,8 @@ char	*ft_newaux(char *str)
 	while (str[i] && str[i] != '\n')
 		i++;
 	if (!str[i] || (ft_strlen(str) == i + 1))
-		return(free(str), NULL);
-	i += 1;
+		return (free(str), NULL);
+	++i;
 	c = malloc(sizeof(char) * (ft_strlen(str) - i + 1));
 	if (!c)
 		return (NULL);
@@ -52,6 +63,7 @@ char	*ft_read(int fd, char *str)
 {
 	int		boo;
 	char	*cad;
+
 	while (!ft_strchr(str, '\n'))
 	{
 		cad = malloc(sizeof(char) * (BUFFER_SIZE + 1));
@@ -74,17 +86,17 @@ char	*ft_read(int fd, char *str)
 	return (str);
 }
 
-char	*get_next_line(int fd)
+char	*ft_get_next_line(int fd)
 {
-	static char *s;
+	static char	*s[1023];
 	char		*c;
 
-	if (fd < 0 || BUFFER_SIZE < 0)
+	if ((fd < 0 || fd > 1023) || BUFFER_SIZE <= 0)
 		return (NULL);
-	s = ft_read(fd, s);
-	if (!s)
+	s[fd] = ft_read(fd, s[fd]);
+	if (!s[fd])
 		return (NULL);
-	c = ft_nextln(s);
-	s = ft_newaux(s);
+	c = ft_nextln(s[fd]);
+	s[fd] = ft_newaux(s[fd]);
 	return (c);
 }

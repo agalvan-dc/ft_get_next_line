@@ -1,31 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agalvan- <agalvan-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/23 19:07:49 by agalvan-          #+#    #+#             */
-/*   Updated: 2026/06/02 14:34:52 by agalvan-         ###   ########.fr       */
+/*   Created: 2026/06/02 14:01:45 by agalvan-          #+#    #+#             */
+/*   Updated: 2026/06/02 14:49:21 by agalvan-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#include "get_next_line.h"
+#include <fcntl.h>
+#include <stdio.h>
 
-# include <stdlib.h>
-# include <unistd.h>
-# include <fcntl.h>
+int	main(int argc, char **argv)
+{
+	int		fd;
+	char	*str;
 
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 42
-# endif
-
-char	*ft_get_next_line(int fd);
-char	*ft_read(int fd, char *str);
-char	*ft_nextln(char *str);
-char	*ft_newaux(char *str);
-size_t	ft_strlen(char *cad);
-char	*ft_accum(char *c, char *s);
-char	*ft_strchr(const char *s, int c);
-#endif
+	(void)argc;
+	fd = open(argv[1], O_RDONLY);
+	str = ft_get_next_line(fd);
+	if (!str)
+		return (close(fd), 1);
+	while (str)
+	{
+		printf("%s\n", str);
+		free(str);
+		str = ft_get_next_line(fd);
+	}
+	return (free(str), close(fd), 0);
+}
