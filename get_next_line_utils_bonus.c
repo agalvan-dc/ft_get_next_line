@@ -6,7 +6,7 @@
 /*   By: agalvan- <agalvan-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 19:02:03 by agalvan-          #+#    #+#             */
-/*   Updated: 2026/06/02 15:34:22 by agalvan-         ###   ########.fr       */
+/*   Updated: 2026/06/02 15:45:01 by agalvan-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,13 @@ char	*ft_strchr(const char *s, int c)
 	c = (char)c;
 	if (!p || !p[0])
 		return (NULL);
-	while (p[i] && p[i] != c)
+	while (p[i])
 	{
 		if (p[i] == c)
 			return (&p[i]);
 		i++;
 	}
-	if (p[i] == c)
+	if (c == '\0')
 		return (&p[i]);
 	return (NULL);
 }
