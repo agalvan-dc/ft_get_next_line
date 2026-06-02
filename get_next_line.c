@@ -6,7 +6,7 @@
 /*   By: agalvan- <agalvan-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 19:01:48 by agalvan-          #+#    #+#             */
-/*   Updated: 2026/06/02 15:31:44 by agalvan-         ###   ########.fr       */
+/*   Updated: 2026/06/02 19:06:02 by agalvan-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	*ft_newaux(char *str)
 	++i;
 	c = malloc(sizeof(char) * (ft_strlen(str) - i + 1));
 	if (!c)
-		return (NULL);
+		return (free(str), NULL);
 	while (str[i])
 		c[j++] = str[i++];
 	c[j] = '\0';
@@ -91,10 +91,10 @@ char	*get_next_line(int fd)
 	static char	*s;
 	char		*c;
 
-	if ((fd < 0 || fd > 1023) || BUFFER_SIZE <= 0)
+	if ((fd < 0 || fd >= 1024) || BUFFER_SIZE <= 0)
 		return (NULL);
 	s = ft_read(fd, s);
-	if (!s[fd])
+	if (!s)
 		return (NULL);
 	c = ft_nextln(s);
 	if (!c)
