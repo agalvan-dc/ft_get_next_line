@@ -6,7 +6,7 @@
 /*   By: agalvan- <agalvan-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 19:01:48 by agalvan-          #+#    #+#             */
-/*   Updated: 2026/06/02 14:33:43 by agalvan-         ###   ########.fr       */
+/*   Updated: 2026/06/02 14:55:22 by agalvan-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ char	*ft_nextln(char *str)
 
 char	*ft_read(int fd, char *str)
 {
-	int		boo;
+	ssize_t		boo;
 	char	*cad;
 
 	while (!ft_strchr(str, '\n'))
