@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agalvan- <agalvan-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 19:01:48 by agalvan-          #+#    #+#             */
-/*   Updated: 2026/06/02 15:31:44 by agalvan-         ###   ########.fr       */
+/*   Updated: 2026/06/02 15:33:51 by agalvan-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,17 +88,17 @@ char	*ft_read(int fd, char *str)
 
 char	*get_next_line(int fd)
 {
-	static char	*s;
+	static char	*s[1024];
 	char		*c;
 
-	if ((fd < 0 || fd > 1023) || BUFFER_SIZE <= 0)
+	if ((fd < 0 || fd > 1024) || BUFFER_SIZE <= 0)
 		return (NULL);
-	s = ft_read(fd, s);
+	s[fd] = ft_read(fd, s[fd]);
 	if (!s[fd])
 		return (NULL);
-	c = ft_nextln(s);
+	c = ft_nextln(s[fd]);
 	if (!c)
-		return (free(s), s = NULL, NULL);
-	s = ft_newaux(s);
+		return (free(s[fd]), s[fd] = NULL, NULL);
+	s[fd] = ft_newaux(s[fd]);
 	return (c);
 }

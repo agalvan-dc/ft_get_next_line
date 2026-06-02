@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agalvan- <agalvan-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 19:02:03 by agalvan-          #+#    #+#             */
-/*   Updated: 2026/06/02 15:32:14 by agalvan-         ###   ########.fr       */
+/*   Updated: 2026/06/02 15:34:22 by agalvan-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,13 @@ char	*ft_strchr(const char *s, int c)
 	c = (char)c;
 	if (!p || !p[0])
 		return (NULL);
-	while (p[i])
+	while (p[i] && p[i] != c)
 	{
 		if (p[i] == c)
 			return (&p[i]);
 		i++;
 	}
-	if (c == '\0')
+	if (p[i] == c)
 		return (&p[i]);
 	return (NULL);
 }
