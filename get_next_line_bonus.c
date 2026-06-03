@@ -27,7 +27,7 @@ char	*ft_newaux(char *str)
 	++i;
 	c = malloc(sizeof(char) * (ft_strlen(str) - i + 1));
 	if (!c)
-		return (NULL);
+		return (free(str), NULL);
 	while (str[i])
 		c[j++] = str[i++];
 	c[j] = '\0';
@@ -49,7 +49,7 @@ char	*ft_nextln(char *str)
 		i++;
 	c = malloc(sizeof(char) * (i + 1));
 	if (!c)
-		return (free(str), NULL);
+		return (NULL);
 	while (j < i)
 	{
 		c[j] = str[j];

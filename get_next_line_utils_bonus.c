@@ -17,6 +17,8 @@ size_t	ft_strlen(char *cad)
 	size_t	len;
 
 	len = 0;
+	if (!cad)
+		return (len);
 	while (cad[len])
 		len++;
 	return (len);
@@ -30,7 +32,7 @@ char	*ft_strchr(const char *s, int c)
 	i = 0;
 	p = (char *)s;
 	c = (char)c;
-	if (!p || !p[0])
+	if (!p)
 		return (NULL);
 	while (p[i])
 	{
